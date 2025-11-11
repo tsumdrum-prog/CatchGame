@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>落ち物キャッチゲーム</title>
-  <link rel="stylesheet" href="style.css" />
+  <!-- user-scalable=noを追加して、ユーザーによる拡大・縮小を無効化 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+  <!-- <body>内のインラインCSSは削除 -->
   <div id="startScreen">
-    <h2>落ち物キャッチゲーム</h2>
-    <input id="playerName" placeholder="名前を入力" />
-    <button onclick="startGame()">スタート</button>
+    <h1>くまの大冒険</h1>
+    <p>弊社商品のアイテムを取ってスコアを参加者と競おう！</p>
+    <h2>スコアアップアイテム</h2>
+    <div class="item-list">
+      <div><img src="assets/item_good1.png" width="40">　<small>コリオリ流量計</small></div>
+      <div><img src="assets/item_good2.png" width="40">　<small>CENTUM</small></div>
+      <div><img src="assets/item_good3.png" width="40">　<small>共焦点スキャナ</small></div>
+      <div><img src="assets/item_good4.png" width="40">　<small>圧力伝送器</small></div>
+      <div><img src="assets/item_good5.png" width="40">　<small>大きな大きな焼きおにぎり</small></div>
+      <div><img src="assets/item_good6.png" width="40">　<small>完全養殖黒瀬ぶり</small></div>
+      <div><img src="assets/item_good7.png" width="40">　<small>おさかなのソーセージ</small></div>
+      <div><img src="assets/item_good8.png" width="40">　<small>ちゃんぽん</small></div>
+    </div>
+    <h2>ゲームオーバーアイテム</h2>
+    <div class="item-list">
+      <div><img src="assets/item_bad1.png" width="40">　<small>他社製流量計</small></div>
+      <div><img src="assets/item_bad2.png" width="40">　<small>他社製冷凍炒飯</small></div>
+    </div>
+    <div>
+      <input id="playerName" placeholder="名前を入力">
+      <button onclick="startGame()">スタート</button>
+    </div>
   </div>
-
-  <canvas id="gameCanvas" width="400" height="600"></canvas>
-
+  <canvas id="gameCanvas"></canvas>
   <div id="gameOverScreen">
-    <h2>ゲームオーバー</h2>
+    <h2>ゲームオーバー！</h2>
     <p>スコア: <span id="finalScore"></span></p>
     <button onclick="location.reload()">もう一度遊ぶ</button>
   </div>
-
   <script src="game.js"></script>
 </body>
 </html>

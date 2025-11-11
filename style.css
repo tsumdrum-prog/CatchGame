@@ -1,20 +1,103 @@
 body {
   margin: 0;
+  padding: 0;
+  height: 100dvh; /* dvhを使用 */
+  width: 100vw;
+  overflow: hidden;
   text-align: center;
   font-family: sans-serif;
+  background: black;
+  color: white;
+
+  /* ゲーム画面の上下に余白を設けるためのFlexbox */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #gameCanvas {
   display: none;
-  background: #111;
-  margin: 0 auto;
+  background: #222;
   border: 2px solid white;
+
+  /* 最大サイズを設定して、大きな画面でも固定 */
+  max-width: 400px;
+  max-height: 600px;
+
+  /* 幅と高さを固定してアスペクト比を維持 */
+  width: 90vw;
+  height: 135vw; /* 400x600のアスペクト比(3:2)に合わせて調整 (90 * 1.5 = 135) */
+  max-height: 90dvh; /* 高さが画面内に収まるように */
+}
+
+/* @mediaクエリを追加して、縦長すぎる画面に対応 */
+@media (min-aspect-ratio: 9/16) {
+  #gameCanvas {
+    width: 60dvh; /* 高さを基準に幅を計算 */
+    height: 90dvh;
+  }
 }
 
 #startScreen, #gameOverScreen {
-  margin-top: 100px;
+  /* margin-top: 100px; を削除 */
+}
+
+#startScreen img {
+
+  /* 幅をビューポート幅の4%に設定。最小20px、最大40pxに制限 */
+  width: clamp(20px, 4vw, 40px);
+  /* 高さを自動調整して縦横比を維持 */
+  height: auto;
+  
+  border: 2px solid #fff;
+  border-radius: 10px;
+  background: #222;
+  padding: 4px;
+  vertical-align: middle;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-list div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+small {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+#startScreen input, #startScreen button {
+  margin-top: 20px;
+}
+
+#startScreen input {
+  padding: 5px;
 }
 
 #gameOverScreen {
   display: none;
+}
+
+/* タイトル */
+#startScreen h1 {
+  font-size: 8vw; /* 画面幅の8%をフォントサイズに */
+}
+
+/* 説明文 */
+#startScreen p {
+  font-size: 3vw;
+}
+
+/* 項目リストのテキスト */
+.item-list small {
+  font-size: 4vw;
 }

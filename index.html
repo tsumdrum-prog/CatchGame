@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>落ち物キャッチゲーム</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="startScreen">
+    <h2>落ち物キャッチゲーム</h2>
+    <input id="playerName" placeholder="名前を入力" />
+    <button onclick="startGame()">スタート</button>
+  </div>
+
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+  <div id="gameOverScreen">
+    <h2>ゲームオーバー</h2>
+    <p>スコア: <span id="finalScore"></span></p>
+    <button onclick="location.reload()">もう一度遊ぶ</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

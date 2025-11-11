@@ -26,12 +26,19 @@ for (let i = 1; i <= 2; i++) {
   badItemImgs.push(img);
 }
 
+// ページの読み込み時にbodyにスタート画面用のクラスを追加
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('gameOverScreen').style.display = 'none';
+    document.body.classList.add('start-mode');
+});
+
 function startGame() {
   playerName = document.getElementById("playerName").value;
   if (!playerName) return alert("名前を入力してください");
 
   document.getElementById("startScreen").style.display = "none";
-  document.body.style.overflow = "hidden";
+  document.body.classList.remove('start-mode'); // スタート画面のクラスを削除
+  document.body.classList.add('game-mode');    // ゲーム画面のクラスを追加
 
   canvas = document.getElementById("gameCanvas");
   canvas.style.display = "block";
@@ -143,5 +150,6 @@ function gameOver() {
   document.getElementById("gameOverScreen").style.display = "block";
   document.getElementById("finalScore").innerText = score;
 
-  document.body.style.overflow = "auto"; // ゲームオーバー時にスクロールを許可
-}
+  document.body.classList.remove('game-mode'); // ゲーム画面のクラスを削除
+  document.body.classList.add('start-mode');  // スタート画面のクラスに戻す
+} 

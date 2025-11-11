@@ -1,18 +1,26 @@
 body {
+  /* 基本的なスタイル */
   margin: 0;
   padding: 0;
-  height: 100dvh; /* dvhを使用 */
-  width: 100vw;
-  overflow: hidden;
   text-align: center;
   font-family: sans-serif;
   background: black;
   color: white;
+}
 
-  /* ゲーム画面の上下に余白を設けるためのFlexbox */
+body.game-mode {
+  /* ゲーム画面用のスタイル */
+  overflow: hidden;
+  height: 100dvh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+body.start-mode {
+  /* スタート画面用のスタイル */
+  overflow-y: auto; /* 縦方向のスクロールを有効化 */
 }
 
 #gameCanvas {
@@ -38,7 +46,13 @@ body {
   }
 }
 
-#startScreen, #gameOverScreen {
+#startScreen {
+  /* margin-topを削除して、bodyのflexboxで中央配置 */
+  overflow-y: auto; /* 縦方向のスクロールを有効化 */
+  max-height: 100dvh; /* 画面高さを超えないように制限 */
+}
+
+#gameOverScreen {
   /* margin-top: 100px; を削除 */
 }
 
@@ -89,7 +103,7 @@ small {
 
 /* タイトル */
 #startScreen h1 {
-  font-size: 8vw; /* 画面幅の8%をフォントサイズに */
+  font-size: 6vw; /* 画面幅の8%をフォントサイズに */
 }
 
 /* 説明文 */

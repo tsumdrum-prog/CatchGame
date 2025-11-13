@@ -152,4 +152,6 @@ function gameOver() {
 
   document.body.classList.remove('game-mode'); // ゲーム画面のクラスを削除
   document.body.classList.add('start-mode');  // スタート画面のクラスに戻す
+
+  submitScore(playerName, score);
 } 

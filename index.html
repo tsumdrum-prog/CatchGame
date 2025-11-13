@@ -34,11 +34,19 @@
     </div>
   </div>
   <canvas id="gameCanvas"></canvas>
-  <div id="gameOverScreen">
-    <h2>ゲームオーバー！</h2>
-    <p>スコア: <span id="finalScore"></span></p>
-    <button onclick="location.reload()">もう一度遊ぶ</button>
+<div id="gameOverScreen">
+  <h2>ゲームオーバー！</h2>
+  <p>スコア: <span id="finalScore"></span></p>
+  
+  <h3>ランキング</h3>
+  <div id="rankingList">
+    <!-- ここにランキングが表示されます -->
   </div>
-  <script src="game.js"></script>
+  
+  <button onclick="location.reload()">もう一度遊ぶ</button>
+</div>
+<!-- game.jsの前にranking.jsを読み込む -->
+<script src="ranking.js"></script>
+<script src="game.js"></script>
 </body>
 </html>

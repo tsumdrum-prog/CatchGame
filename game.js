@@ -145,13 +145,15 @@ function gameLoop() {
 }
 
 function gameOver() {
+  if (isGameOver) return; // ← 二重呼び出し防止！
   isGameOver = true;
+
   canvas.style.display = "none";
   document.getElementById("gameOverScreen").style.display = "block";
   document.getElementById("finalScore").innerText = score;
 
-  document.body.classList.remove('game-mode'); // ゲーム画面のクラスを削除
-  document.body.classList.add('start-mode');  // スタート画面のクラスに戻す
+  document.body.classList.remove('game-mode');
+  document.body.classList.add('start-mode');
 
   submitScore(playerName, score);
-} 
+}

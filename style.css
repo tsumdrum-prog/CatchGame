@@ -1,68 +1,45 @@
-body {
-  /* 基本的なスタイル */
+body, html {
   margin: 0;
   padding: 0;
-  text-align: center;
-  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
   background: black;
   color: white;
+  font-family: sans-serif;
 }
 
 body.game-mode {
-  /* ゲーム画面用のスタイル */
   overflow: hidden;
-  height: 100dvh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-body.start-mode {
-  /* スタート画面用のスタイル */
-  overflow-y: auto; /* 縦方向のスクロールを有効化 */
 }
 
 #gameCanvas {
-  display: none;
-  background: #222;
-  border: 2px solid white;
+  display: block;
+  width: 100vw;
+  height: 100vh; /* 画面いっぱいにする */
+  background-color: #222;
+  border-radius: 0; /* スマホ全体なら丸角は無しでもOK */
+  box-shadow: none; /* 画面全体なら影も不要 */
+}
 
-  /* 最大サイズを設定して、大きな画面でも固定 */
+/* スタート画面・ゲームオーバー画面 */
+#startScreen, #gameOverScreen {
+  text-align: center;
+  padding: 20px;
+  background-color: #070707;
+  border-radius: 10px;
+  width: 90%;
   max-width: 400px;
-  max-height: 600px;
-
-  /* 幅と高さを固定してアスペクト比を維持 */
-  width: 90vw;
-  height: 135vw; /* 400x600のアスペクト比(3:2)に合わせて調整 (90 * 1.5 = 135) */
-  max-height: 90dvh; /* 高さが画面内に収まるように */
-}
-
-/* @mediaクエリを追加して、縦長すぎる画面に対応 */
-@media (min-aspect-ratio: 9/16) {
-  #gameCanvas {
-    width: 60dvh; /* 高さを基準に幅を計算 */
-    height: 90dvh;
-  }
-}
-
-#startScreen {
-  /* margin-topを削除して、bodyのflexboxで中央配置 */
-  overflow-y: auto; /* 縦方向のスクロールを有効化 */
-  max-height: 100dvh; /* 画面高さを超えないように制限 */
-}
-
-#gameOverScreen {
-  /* margin-top: 100px; を削除 */
+  margin: 0 auto;        /* 上下の余白を削除 */
+  min-height: 100vh;     /* 画面全体に高さを合わせる */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 中央揃え */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 #startScreen img {
-
-  /* 幅をビューポート幅の4%に設定。最小20px、最大40pxに制限 */
   width: clamp(20px, 4vw, 40px);
-  /* 高さを自動調整して縦横比を維持 */
   height: auto;
-  
   border: 2px solid #fff;
   border-radius: 10px;
   background: #222;
@@ -70,23 +47,17 @@ body.start-mode {
   vertical-align: middle;
 }
 
-.item-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
 .item-list div {
   display: flex;
   align-items: center;
-  gap: 8px;
   justify-content: center;
+  gap: 8px;
+  margin: 5px 0;
 }
 
 small {
   color: #ccc;
-  font-size: 0.9rem;
+  font-size: 4vw;
 }
 
 #startScreen input, #startScreen button {
@@ -97,21 +68,17 @@ small {
   padding: 5px;
 }
 
-#gameOverScreen {
-  display: none;
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff8c00;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* タイトル */
-#startScreen h1 {
-  font-size: 6vw; /* 画面幅の8%をフォントサイズに */
-}
-
-/* 説明文 */
-#startScreen p {
-  font-size: 3vw;
-}
-
-/* 項目リストのテキスト */
-.item-list small {
-  font-size: 4vw;
+button:hover {
+  background-color: #ffa500;
 }

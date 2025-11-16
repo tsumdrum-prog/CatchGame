@@ -1,5 +1,5 @@
 let canvas, ctx;
-let player = { x: 0, y: 0, size: 40 }; // 初期位置を0に設定
+let player = { x: 0, y: 0, size: 0 }; // サイズはリサイズ時に決定
 let items = [];
 let score = 0;
 let isGameOver = false;
@@ -12,24 +12,20 @@ playerImg.src = "assets/player.png";
 // 複数画像を配列で管理
 const goodItemImgs = [];
 const badItemImgs = [];
-
-// 画像を複数読み込み
 for (let i = 1; i <= 8; i++) {
   const img = new Image();
   img.src = `assets/item_good${i}.png`;
   goodItemImgs.push(img);
 }
-
 for (let i = 1; i <= 2; i++) {
   const img = new Image();
   img.src = `assets/item_bad${i}.png`;
   badItemImgs.push(img);
 }
 
-// ページの読み込み時にbodyにスタート画面用のクラスを追加
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('gameOverScreen').style.display = 'none';
-    document.body.classList.add('start-mode');
+  document.getElementById('gameOverScreen').style.display = 'none';
+  document.body.classList.add('start-mode');
 });
 
 function startGame() {
@@ -37,78 +33,67 @@ function startGame() {
   if (!playerName) return alert("名前を入力してください");
 
   document.getElementById("startScreen").style.display = "none";
-  document.body.classList.remove('start-mode'); // スタート画面のクラスを削除
-  document.body.classList.add('game-mode');    // ゲーム画面のクラスを追加
+  document.body.classList.remove('start-mode');
+  document.body.classList.add('game-mode');
 
   canvas = document.getElementById("gameCanvas");
   canvas.style.display = "block";
   ctx = canvas.getContext("2d");
 
-  // canvasの内部解像度を実際の表示サイズに設定し、アスペクト比を維持
-  const rect = canvas.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
+  resizeCanvas();
 
-  // プレイヤーの初期位置を中央に設定
-  player.x = canvas.width / 2 - player.size / 2;
-  player.y = canvas.height - 50;
-
-  // タッチイベントに対応
+  // タッチ・マウスイベント
   canvas.addEventListener("touchmove", handleMove, { passive: false });
-  // PCでのデバッグ用としてマウスイベントも残しておく
   canvas.addEventListener("mousemove", handleMove);
 
   gameLoop();
   spawnItems();
 }
 
-// canvasのサイズ変更処理
+// 画面サイズに応じてCanvasとプレイヤー・アイテムサイズを調整
 function resizeCanvas() {
-  canvas.width = Math.min(window.innerWidth * 0.9, 400);
-  canvas.height = Math.min(window.innerHeight * 0.8, 600);
-  player.y = canvas.height - 50;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  player.size = canvas.width * 0.1;
+  player.x = canvas.width / 2 - player.size / 2;
+  player.y = canvas.height * 0.75;
+
+  items.forEach(item => {
+    item.size = canvas.width * 0.075;
+  });
 }
 
-// マウスとタッチの両方に対応する移動処理
+window.addEventListener('resize', resizeCanvas);
+
 function handleMove(e) {
-  // タッチイベントの場合のみpreventDefaultを実行
-  if (e.touches && e.touches.length > 0) {
-    e.preventDefault(); 
-  }
-  // スクロールなどのデフォルト動作を無効化
-  e.preventDefault(); 
-  
+  e.preventDefault();
   const rect = canvas.getBoundingClientRect();
-  let clientX;
-  if (e.touches && e.touches.length > 0) {
-    clientX = e.touches[0].clientX; // タッチイベント
-  } else {
-    clientX = e.clientX; // マウスイベント
-  }
-  
+  let clientX = e.touches ? e.touches[0].clientX : e.clientX;
   player.x = clientX - rect.left - player.size / 2;
-  
-  // プレイヤーが画面外に出ないように制限
+
   if (player.x < 0) player.x = 0;
   if (player.x > canvas.width - player.size) player.x = canvas.width - player.size;
 }
 
 function spawnItems() {
   if (isGameOver) return;
-  
+
   const good = Math.random() > 0.2;
   const imageList = good ? goodItemImgs : badItemImgs;
   const img = imageList[Math.floor(Math.random() * imageList.length)];
-  
+
+  const size = canvas.width * 0.075;
+
   items.push({
-    x: Math.random() * (canvas.width - 30), // canvasの幅に応じてアイテムの出現位置を調整
-    y: -20,
-    size: 30,
-    speed: 3 + Math.random() * 3,
+    x: Math.random() * (canvas.width - size),
+    y: -size,
+    size: size,
+    speed: canvas.height * 0.004 + Math.random() * 2, // 画面高さに応じて落下速度調整
     good,
     img
   });
-  
+
   setTimeout(spawnItems, 800);
 }
 
@@ -122,7 +107,6 @@ function gameLoop() {
     ctx.drawImage(item.img, item.x, item.y, item.size, item.size);
     item.y += item.speed;
 
-    // 当たり判定
     if (
       item.y + item.size >= player.y &&
       item.x < player.x + player.size &&
@@ -133,19 +117,29 @@ function gameLoop() {
       items.splice(i, 1);
     }
 
-    // 画面外削除
     if (item.y > canvas.height) items.splice(i, 1);
   });
 
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText("Score: " + score, 10, 30);
+  // フォントサイズと太さを大きく
+  ctx.font = "bold 28px Arial";
+
+  // 文字色をグラデーションっぽく
+  const gradient = ctx.createLinearGradient(0, 0, 200, 0);
+  gradient.addColorStop(0, "#ff8c00"); // オレンジ
+  gradient.addColorStop(1, "#ffff00"); // 黄色
+  ctx.fillStyle = gradient;
+
+  // 薄く縁取りを入れる（目立たせる）
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.strokeText("Score: " + score, 10, 35);
+  ctx.fillText("Score: " + score, 10, 35);
 
   requestAnimationFrame(gameLoop);
 }
 
 function gameOver() {
-  if (isGameOver) return; // ← 二重呼び出し防止！
+  if (isGameOver) return;
   isGameOver = true;
 
   canvas.style.display = "none";

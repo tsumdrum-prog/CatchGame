@@ -32,6 +32,15 @@ function startGame() {
   playerName = document.getElementById("playerName").value;
   if (!playerName) return alert("名前を入力してください");
 
+  // ★ BGM再生（ユーザー操作内なのでOK）
+  const bgm = document.getElementById("bgm");
+  bgm.volume = 0.5; // 音量（0.0〜1.0）
+  bgm.play().catch(() => {
+    // 一部端末での保険
+    console.log("BGM再生はユーザー操作待ち");
+  });
+
+  document.getElementById("startScreen").style.display = "none";
   document.getElementById("startScreen").style.display = "none";
   document.body.classList.remove('start-mode');
   document.body.classList.add('game-mode');

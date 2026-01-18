@@ -4,7 +4,7 @@ const firebaseConfig = {
   authDomain: "game-ranking-65eab.firebaseapp.com",
   databaseURL: "https://game-ranking-65eab-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "game-ranking-65eab",
-  storageBucket: "game-ranking-65eab.appspot.com",
+  storageBucket: "game-ranking-65eab.firebasestorage.app",
   messagingSenderId: "914841797728",
   appId: "1:914841797728:web:abf47cb1dd65e1f2a46f05"
 };
@@ -47,9 +47,10 @@ function displayRanking(data) {
   }
 
   data.sort((a, b) => Number(b.score) - Number(a.score));
-  const top5 = data.slice(0, 5);
 
-  top5.forEach((entry, index) => {
+  const top10 = data.slice(0, 10);
+
+  top10.forEach((entry, index) => {
     const div = document.createElement("div");
     div.textContent = `${index + 1}. ${entry.name} - ${entry.score}`;
     list.appendChild(div);

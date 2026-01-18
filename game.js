@@ -116,10 +116,24 @@ function gameLoop() {
     ctx.drawImage(item.img, item.x, item.y, item.size, item.size);
     item.y += item.speed;
 
+    // ヒットボックス縮小率
+    const HIT_RATE = 0.6;
+
+    // プレイヤー当たり判定
+    const pSize = player.size * HIT_RATE;
+    const pX = player.x + (player.size - pSize) / 2;
+    const pY = player.y + (player.size - pSize) / 2;
+
+    // アイテム当たり判定
+    const iSize = item.size * HIT_RATE;
+    const iX = item.x + (item.size - iSize) / 2;
+    const iY = item.y + (item.size - iSize) / 2;
+
     if (
-      item.y + item.size >= player.y &&
-      item.x < player.x + player.size &&
-      item.x + item.size > player.x
+      iY + iSize > pY &&
+      iY < pY + pSize &&
+      iX + iSize > pX &&
+      iX < pX + pSize
     ) {
       if (item.good) score++;
       else return gameOver();

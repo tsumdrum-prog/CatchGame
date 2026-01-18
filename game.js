@@ -130,10 +130,10 @@ function gameLoop() {
     const iY = item.y + (item.size - iSize) / 2;
 
     if (
-      iY + iSize > pY &&
-      iY < pY + pSize &&
-      iX + iSize > pX &&
-      iX < pX + pSize
+      item.x < player.x + player.size &&
+      item.x + item.size > player.x &&
+      item.y < player.y + player.size &&
+      item.y + item.size > player.y
     ) {
       if (item.good) score++;
       else return gameOver();

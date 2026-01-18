@@ -112,23 +112,13 @@ function gameLoop() {
 
   ctx.drawImage(playerImg, player.x, player.y, player.size, player.size);
 
-  items.forEach((item, i) => {
+  for (let i = items.length - 1; i >= 0; i--) {
+    const item = items[i];
+
     ctx.drawImage(item.img, item.x, item.y, item.size, item.size);
     item.y += item.speed;
 
-    // ヒットボックス縮小率
-    const HIT_RATE = 0.6;
-
-    // プレイヤー当たり判定
-    const pSize = player.size * HIT_RATE;
-    const pX = player.x + (player.size - pSize) / 2;
-    const pY = player.y + (player.size - pSize) / 2;
-
-    // アイテム当たり判定
-    const iSize = item.size * HIT_RATE;
-    const iX = item.x + (item.size - iSize) / 2;
-    const iY = item.y + (item.size - iSize) / 2;
-
+    // 正しい矩形当たり判定
     if (
       item.x < player.x + player.size &&
       item.x + item.size > player.x &&
@@ -138,10 +128,14 @@ function gameLoop() {
       if (item.good) score++;
       else return gameOver();
       items.splice(i, 1);
+      continue;
     }
 
-    if (item.y > canvas.height) items.splice(i, 1);
-  });
+    // 画面外に出たら削除
+    if (item.y > canvas.height) {
+      items.splice(i, 1);
+    }
+  }
 
   // フォントサイズと太さを大きく
   ctx.font = "bold 28px Arial";

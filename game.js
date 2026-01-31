@@ -189,6 +189,10 @@ function gameOver() {
   if (isGameOver) return;
   isGameOver = true;
 
+  const bgm = document.getElementById("bgm");
+  bgm.pause();
+  bgm.currentTime = 0;
+
   canvas.style.display = "none";
   document.getElementById("gameOverScreen").style.display = "block";
   document.getElementById("finalScore").innerText = score;

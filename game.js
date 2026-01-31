@@ -5,6 +5,9 @@ let score = 0;
 let isGameOver = false;
 let playerName = "";
 
+let gameStartTime = 0;
+let speedMultiplier = 1;
+
 // プレイヤー画像
 const playerImg = new Image();
 playerImg.src = "assets/player.png";
@@ -50,6 +53,9 @@ function startGame() {
   ctx = canvas.getContext("2d");
 
   resizeCanvas();
+
+  gameStartTime = Date.now();
+  speedMultiplier = 1;
 
   // タッチ・マウスイベント
   canvas.addEventListener("touchmove", handleMove, { passive: false });
@@ -108,6 +114,10 @@ function spawnItems() {
 
 function gameLoop() {
   if (isGameOver) return;
+
+  const elapsedSec = (Date.now() - gameStartTime) / 1000;
+  speedMultiplier = Math.min(1 + elapsedSec * 0.03, 3);
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.drawImage(playerImg, player.x, player.y, player.size, player.size);
@@ -116,7 +126,7 @@ function gameLoop() {
     const item = items[i];
 
     ctx.drawImage(item.img, item.x, item.y, item.size, item.size);
-    item.y += item.speed;
+    item.y += item.speed * speedMultiplier;
 
     // 正しい矩形当たり判定
     if (

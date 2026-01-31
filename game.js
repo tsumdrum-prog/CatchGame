@@ -8,6 +8,8 @@ let playerName = "";
 let gameStartTime = 0;
 let speedMultiplier = 1;
 
+let seGood, seBad;
+
 // プレイヤー画像
 const playerImg = new Image();
 playerImg.src = "assets/player.png";
@@ -33,6 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function startGame() {
   playerName = document.getElementById("playerName").value;
+
+  seGood = document.getElementById("seGood");
+  seBad  = document.getElementById("seBad");
+
+  seGood.volume = 0.6;
+  seBad.volume = 0.7;
+
   if (!playerName) return alert("名前を入力してください");
 
   // ★ BGM再生（ユーザー操作内なのでOK）
@@ -135,8 +144,19 @@ function gameLoop() {
       item.y < player.y + player.size &&
       item.y + item.size > player.y
     ) {
-      if (item.good) score++;
-      else return gameOver();
+      if (item.good) {
+        score++;
+
+        // ★ 良いアイテムSE
+        seGood.currentTime = 0;
+        seGood.play();
+
+      } else {
+        // ★ ゲームオーバーSE
+        seBad.currentTime = 0;
+        seBad.play();
+        return gameOver();
+      }
       items.splice(i, 1);
       continue;
     }

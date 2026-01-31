@@ -76,14 +76,12 @@ small {
 }
 
 button {
+  font-family: 'RetroFont';
   padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  background-color: #ff8c00;
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
+  font-size: 30px;
+  letter-spacing: 0.1em;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #000 inset;
 }
 
 button:hover {

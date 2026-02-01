@@ -10,6 +10,8 @@ let speedMultiplier = 1;
 
 let seGood, seBad;
 
+let scorePopFrame = 0;   // ポップ演出用フレーム
+
 // プレイヤー画像
 const playerImg = new Image();
 playerImg.src = "assets/player.png";
@@ -121,16 +123,68 @@ function spawnItems() {
   setTimeout(spawnItems, 800);
 }
 
+function drawCenterScore() {
+  ctx.save();
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const x = canvas.width / 2;
+  const y = canvas.height / 2;
+
+  // ===== ベース設定（倍サイズ）=====
+  let baseSize = 128;   // ← 64 → 128（倍）
+  let fontSize = baseSize;
+  let alpha = 0.4;
+  let color = "#ffffaa";
+
+  // ===== スコア増加ポップ =====
+  if (scorePopFrame > 0) {
+    const t = scorePopFrame / 12;   // 1 → 0
+    fontSize = baseSize + baseSize * 0.5 * t; // 最大1.5倍
+    alpha = 0.85;
+    scorePopFrame--;
+  }
+
+  // ===== ゲームオーバー演出 =====
+  if (isGameOver) {
+    fontSize = baseSize * 2; // 超デカ
+    alpha = 1;
+    color = "#ff5555";
+  }
+
+  ctx.globalAlpha = alpha;
+  ctx.font = `bold ${fontSize}px RetroFont`;
+  ctx.fillStyle = color;
+  ctx.strokeStyle = "#000";
+  ctx.lineWidth = fontSize * 0.08;
+
+  const text = `Score: ${score}`;
+
+  ctx.strokeText(text, x, y);
+  ctx.fillText(text, x, y);
+
+  ctx.restore();
+}
+
 function gameLoop() {
-  if (isGameOver) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // スコアは常に描画
+  drawCenterScore();
+
+  // ゲームオーバー中は「更新だけ止める」
+  if (isGameOver) {
+    requestAnimationFrame(gameLoop);
+    return;
+  }
 
   const elapsedSec = (Date.now() - gameStartTime) / 1000;
   speedMultiplier = Math.min(1 + elapsedSec * 0.05, 6);
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.drawImage(playerImg, player.x, player.y, player.size, player.size);
 
+  // アイテム処理
   for (let i = items.length - 1; i >= 0; i--) {
     const item = items[i];
 
@@ -146,6 +200,7 @@ function gameLoop() {
     ) {
       if (item.good) {
         score++;
+        scorePopFrame = 12; // 12フレーム分ポップ
 
         // ★ 良いアイテムSE
         seGood.currentTime = 0;
@@ -167,20 +222,8 @@ function gameLoop() {
     }
   }
 
-  // フォントサイズと太さを大きく
-  ctx.font = "bold 28px Arial";
-
-  // 文字色をグラデーションっぽく
-  const gradient = ctx.createLinearGradient(0, 0, 200, 0);
-  gradient.addColorStop(0, "#ff8c00"); // オレンジ
-  gradient.addColorStop(1, "#ffff00"); // 黄色
-  ctx.fillStyle = gradient;
-
-  // 薄く縁取りを入れる（目立たせる）
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 3;
-  ctx.strokeText("Score: " + score, 10, 35);
-  ctx.fillText("Score: " + score, 10, 35);
+  // ★ 最後に描く
+  drawCenterScore();
 
   requestAnimationFrame(gameLoop);
 }
@@ -193,12 +236,12 @@ function gameOver() {
   bgm.pause();
   bgm.currentTime = 0;
 
-  canvas.style.display = "none";
-  document.getElementById("gameOverScreen").style.display = "block";
-  document.getElementById("finalScore").innerText = score;
-
-  document.body.classList.remove('game-mode');
-  document.body.classList.add('start-mode');
+  // 1秒だけ中央スコアを見せる
+  setTimeout(() => {
+    canvas.style.display = "none";
+    document.getElementById("gameOverScreen").style.display = "block";
+    document.getElementById("finalScore").innerText = score;
+  }, 1000);
 
   submitScore(playerName, score);
 }

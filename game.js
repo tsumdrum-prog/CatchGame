@@ -125,7 +125,7 @@ function gameLoop() {
   if (isGameOver) return;
 
   const elapsedSec = (Date.now() - gameStartTime) / 1000;
-  speedMultiplier = Math.min(1 + elapsedSec * 0.03, 3);
+  speedMultiplier = Math.min(1 + elapsedSec * 0.05, 6);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 

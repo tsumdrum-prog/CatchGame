@@ -86,7 +86,7 @@ function resizeCanvas() {
   player.y = canvas.height * 0.75;
 
   items.forEach(item => {
-    item.size = canvas.width * 0.2;
+    item.size = canvas.width * 0.1;
   });
 }
 
@@ -109,7 +109,7 @@ function spawnItems() {
   const imageList = good ? goodItemImgs : badItemImgs;
   const img = imageList[Math.floor(Math.random() * imageList.length)];
 
-  const size = canvas.width * 0.075;
+  const size = canvas.width * 0.1;
 
   items.push({
     x: Math.random() * (canvas.width - size),

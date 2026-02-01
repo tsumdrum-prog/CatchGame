@@ -133,7 +133,7 @@ function drawCenterScore() {
   const y = canvas.height / 2;
 
   // ===== ベース設定（倍サイズ）=====
-  let baseSize = 128;   // ← 64 → 128（倍）
+  let baseSize = 64;   // ← 64 → 128（倍）
   let fontSize = baseSize;
   let alpha = 0.4;
   let color = "#ffffaa";

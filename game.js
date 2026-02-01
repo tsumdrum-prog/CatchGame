@@ -84,7 +84,7 @@ function resizeCanvas() {
   player.y = canvas.height * 0.75;
 
   items.forEach(item => {
-    item.size = canvas.width * 0.1;
+    item.size = canvas.width * 0.2;
   });
 }
 

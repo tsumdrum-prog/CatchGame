@@ -12,6 +12,13 @@ let seGood, seBad;
 
 let scorePopFrame = 0;   // ポップ演出用フレーム
 
+let spawnInterval = 800;   // 初期スポーン間隔(ms)
+const minInterval = 300;  // 最小間隔(ms)
+const intervalDecrease = 40; // どれだけ早くするか
+const decreaseTime = 10000;  // 何msごとに速くするか
+
+let lastDecreaseTime = Date.now();
+
 // プレイヤー画像
 const playerImg = new Image();
 playerImg.src = "assets/player.png";
@@ -115,12 +122,19 @@ function spawnItems() {
     x: Math.random() * (canvas.width - size),
     y: -size,
     size: size,
-    speed: canvas.height * 0.004 + Math.random() * 2, // 画面高さに応じて落下速度調整
+    speed: canvas.height * 0.004 + Math.random() * 2,
     good,
     img
   });
 
-  setTimeout(spawnItems, 800);
+  // ⏱ 一定時間ごとにスポーン間隔を短くする
+  const now = Date.now();
+  if (now - lastDecreaseTime > decreaseTime) {
+    spawnInterval = Math.max(minInterval, spawnInterval - intervalDecrease);
+    lastDecreaseTime = now;
+  }
+
+  setTimeout(spawnItems, spawnInterval);
 }
 
 function drawCenterScore() {
